@@ -5,7 +5,9 @@ const roomsInput = document.getElementById("rooms");
 const guestsPerRoomInput = document.getElementById("guestsPerRoom");
 const numGuestsInput = document.getElementById("numGuests");
 const guestsContainer = document.getElementById("guestsContainer");
-const hotelPriorityContainer = document.getElementById("hotelPriorityContainer");
+const hotelPriorityContainer = document.getElementById(
+  "hotelPriorityContainer",
+);
 const roomPriorityContainer = document.getElementById("roomPriorityContainer");
 const addHotelBtn = document.getElementById("addHotelBtn");
 const addRoomBtn = document.getElementById("addRoomBtn");
@@ -30,14 +32,14 @@ const defaultHotelPriorities = [
   "Courtyard Los Angeles L.A. Live",
   "Residence Inn Los Angeles L.A. Live",
   "AC Hotel Downtown Los Angeles",
-  "E-Central Hotel"
+  "E-Central Hotel",
 ];
 
 const defaultRoomPriorities = [
   "Guest room, 2 Queen",
   "2 queens bed",
   "Cheapest room",
-  "1 bed"
+  "1 bed",
 ];
 
 // Set default dates (current date + 1 month for check-in)
@@ -55,11 +57,12 @@ function setDefaultDates() {
 // Generate hotel priority list UI
 function generateHotelPriorityList(hotelList = defaultHotelPriorities) {
   hotelPriorityContainer.innerHTML = "";
-  
+
   hotelList.forEach((hotel, index) => {
     const hotelItem = document.createElement("div");
     hotelItem.className = "priority-item";
-    hotelItem.style.cssText = "display: flex; gap: 10px; margin-bottom: 8px; align-items: center;";
+    hotelItem.style.cssText =
+      "display: flex; gap: 10px; margin-bottom: 8px; align-items: center;";
     hotelItem.innerHTML = `
       <span style="min-width: 25px; font-weight: bold; color: #667eea;">${index + 1}.</span>
       <input type="text" class="hotel-priority-input" value="${hotel}" 
@@ -74,7 +77,7 @@ function generateHotelPriorityList(hotelList = defaultHotelPriorities) {
   });
 
   // Add event listeners to remove buttons
-  document.querySelectorAll(".remove-hotel-btn").forEach(btn => {
+  document.querySelectorAll(".remove-hotel-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const index = parseInt(e.target.dataset.index);
       const currentList = getHotelPriorityList();
@@ -87,11 +90,12 @@ function generateHotelPriorityList(hotelList = defaultHotelPriorities) {
 // Generate room priority list UI
 function generateRoomPriorityList(roomList = defaultRoomPriorities) {
   roomPriorityContainer.innerHTML = "";
-  
+
   roomList.forEach((room, index) => {
     const roomItem = document.createElement("div");
     roomItem.className = "priority-item";
-    roomItem.style.cssText = "display: flex; gap: 10px; margin-bottom: 8px; align-items: center;";
+    roomItem.style.cssText =
+      "display: flex; gap: 10px; margin-bottom: 8px; align-items: center;";
     roomItem.innerHTML = `
       <span style="min-width: 25px; font-weight: bold; color: #667eea;">${index + 1}.</span>
       <input type="text" class="room-priority-input" value="${room}" 
@@ -106,7 +110,7 @@ function generateRoomPriorityList(roomList = defaultRoomPriorities) {
   });
 
   // Add event listeners to remove buttons
-  document.querySelectorAll(".remove-room-btn").forEach(btn => {
+  document.querySelectorAll(".remove-room-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const index = parseInt(e.target.dataset.index);
       const currentList = getRoomPriorityList();
@@ -119,13 +123,17 @@ function generateRoomPriorityList(roomList = defaultRoomPriorities) {
 // Get current hotel priority list from UI
 function getHotelPriorityList() {
   const inputs = document.querySelectorAll(".hotel-priority-input");
-  return Array.from(inputs).map(input => input.value.trim()).filter(v => v);
+  return Array.from(inputs)
+    .map((input) => input.value.trim())
+    .filter((v) => v);
 }
 
 // Get current room priority list from UI
 function getRoomPriorityList() {
   const inputs = document.querySelectorAll(".room-priority-input");
-  return Array.from(inputs).map(input => input.value.trim()).filter(v => v);
+  return Array.from(inputs)
+    .map((input) => input.value.trim())
+    .filter((v) => v);
 }
 
 // Add new hotel to priority list
@@ -151,7 +159,6 @@ addRoomBtn.addEventListener("click", () => {
     inputs[inputs.length - 1].focus();
   }
 });
-
 
 // Generate guest information forms
 function generateGuestForms() {

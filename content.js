@@ -256,7 +256,9 @@ function handleSelectHotelPage() {
         if (text.includes(targetHotelName)) {
           targetHotel = el.closest("div, li, article, section") || el;
           matchedHotelName = priorityHotelName;
-          console.log(`✓ Found priority hotel: "${priorityHotelName}" in general search`);
+          console.log(
+            `✓ Found priority hotel: "${priorityHotelName}" in general search`,
+          );
           break;
         }
       }
@@ -310,7 +312,9 @@ function handleSelectHotelPage() {
         targetHotel.style.border = "3px solid red";
       }
     } else {
-      console.error(`✗ Could not find any hotels from priority list: ${hotelPriorities.join(", ")}`);
+      console.error(
+        `✗ Could not find any hotels from priority list: ${hotelPriorities.join(", ")}`,
+      );
       console.log("Available hotels:");
       hotelElements.forEach((el, i) => {
         console.log(`  [${i}]`, el.textContent.substring(0, 100));
@@ -351,7 +355,11 @@ function handleSelectRoomPage() {
 
       // Search for configured room name
       for (const room of roomElements) {
-        const roomText = (room.textContent || room.innerText || "").toLowerCase();
+        const roomText = (
+          room.textContent ||
+          room.innerText ||
+          ""
+        ).toLowerCase();
         if (roomText.includes(targetRoomName)) {
           targetRoom = room;
           matchedRoomName = priorityRoomName;
@@ -421,7 +429,9 @@ function handleSelectRoomPage() {
         targetRoom.style.border = "3px solid red";
       }
     } else {
-      console.error(`✗ Could not find any rooms from priority list: ${roomPriorities.join(", ")}`);
+      console.error(
+        `✗ Could not find any rooms from priority list: ${roomPriorities.join(", ")}`,
+      );
       console.log("Available rooms:");
       roomElements.forEach((el, i) => {
         const text = (el.textContent || el.innerText).substring(0, 100);
