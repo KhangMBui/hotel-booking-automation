@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Quick Hotel Booker",
+  "version": "1.0.0",
+  "description": "Automate hotel booking process with one-click automation",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["https://book.passkey.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon_booking.png",
+      "48": "icons/icon_booking.png",
+      "128": "icons/icon_booking.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon_booking.png",
+    "48": "icons/icon_booking.png",
+    "128": "icons/icon_booking.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://book.passkey.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

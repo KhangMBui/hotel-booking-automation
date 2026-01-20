@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quick Hotel Booker</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Quick Hotel Booker</h1>
+
+      <div class="status" id="status"></div>
+
+      <div class="section">
+        <h2>Booking Details</h2>
+
+        <label for="checkIn">Check-In Date:</label>
+        <input type="date" id="checkIn" required />
+
+        <label for="checkOut">Check-Out Date:</label>
+        <input type="date" id="checkOut" required />
+
+        <label for="hotelName">Hotel Name:</label>
+        <input
+          type="text"
+          id="hotelName"
+          placeholder="e.g., Kawada Hotel"
+          required
+        />
+
+        <label for="roomName">Room Name:</label>
+        <input
+          type="text"
+          id="roomName"
+          placeholder="e.g., Twin Beds Non Smoking"
+          required
+        />
+
+        <label for="rooms">Number of Rooms:</label>
+        <input type="number" id="rooms" min="1" max="10" value="1" required />
+
+        <label for="guestsPerRoom">Guests per Room:</label>
+        <input
+          type="number"
+          id="guestsPerRoom"
+          min="1"
+          max="4"
+          value="2"
+          required
+        />
+      </div>
+
+      <div class="section">
+        <h2>Number of Guests</h2>
+        <label for="numGuests">Total Guests to Enter Info:</label>
+        <input
+          type="number"
+          id="numGuests"
+          min="1"
+          max="10"
+          value="2"
+          required
+        />
+      </div>
+
+      <div id="guestsContainer"></div>
+
+      <div class="section">
+        <h2>Payment Information</h2>
+
+        <label for="cardNumber">Card Number:</label>
+        <input
+          type="text"
+          id="cardNumber"
+          placeholder="1234567890123456"
+          required
+        />
+
+        <label for="cardMonth">Expiration Month (MM):</label>
+        <input
+          type="text"
+          id="cardMonth"
+          placeholder="12"
+          maxlength="2"
+          required
+        />
+
+        <label for="cardYear">Expiration Year (YY):</label>
+        <input
+          type="text"
+          id="cardYear"
+          placeholder="26"
+          maxlength="2"
+          required
+        />
+
+        <label for="cvv">CVV:</label>
+        <input type="text" id="cvv" placeholder="123" maxlength="4" required />
+
+        <label for="billingAddress">Billing Address:</label>
+        <input type="text" id="billingAddress" required />
+
+        <label for="billingCity">City:</label>
+        <input type="text" id="billingCity" required />
+
+        <label for="billingState">State/Province:</label>
+        <input type="text" id="billingState" required />
+
+        <label for="billingZip">ZIP/Postal Code:</label>
+        <input type="text" id="billingZip" required />
+
+        <label for="billingCountry">Country:</label>
+        <input type="text" id="billingCountry" value="USA" required />
+      </div>
+
+      <div class="actions">
+        <button id="saveBtn" class="btn btn-primary">Save Configuration</button>
+        <button id="startBtn" class="btn btn-success">Start Automation</button>
+      </div>
+
+      <div class="info">
+        <p><strong>Instructions:</strong></p>
+        <ol>
+          <li>Fill in all booking and guest details</li>
+          <li>Click "Save Configuration" to store your information</li>
+          <li>Navigate to the booking page</li>
+          <li>Click "Start Automation" to begin the booking process</li>
+        </ol>
+      </div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Icon Generator</title>
+  </head>
+  <body>
+    <h1>Icon Generator for Quick Hotel Booker</h1>
+    <p>Click the buttons below to download placeholder icons:</p>
+
+    <button onclick="createIcon(16)">Download 16x16</button>
+    <button onclick="createIcon(48)">Download 48x48</button>
+    <button onclick="createIcon(128)">Download 128x128</button>
+
+    <script>
+      function createIcon(size) {
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+
+        // Blue background
+        ctx.fillStyle = "#3498db";
+        ctx.fillRect(0, 0, size, size);
+
+        // White border
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = Math.max(1, size / 16);
+        ctx.strokeRect(
+          ctx.lineWidth / 2,
+          ctx.lineWidth / 2,
+          size - ctx.lineWidth,
+          size - ctx.lineWidth,
+        );
+
+        // White "H" for Hotel
+        ctx.fillStyle = "#ffffff";
+        ctx.font = `bold ${size * 0.6}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("H", size / 2, size / 2);
+
+        // Download
+        canvas.toBlob(function (blob) {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `icon${size}.png`;
+          a.click();
+          URL.revokeObjectURL(url);
+        });
+      }
+    </script>
+  </body>
+</html>
