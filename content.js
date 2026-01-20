@@ -211,7 +211,8 @@ function handleSelectHotelPage() {
   console.log("=== SELECT HOTEL PAGE AUTOMATION STARTED ===");
 
   try {
-    const targetHotelName = (config?.hotelName || "Kawada Hotel").toLowerCase();
+    const hotelPriorities = config?.hotelPriorities || ["Kawada Hotel"];
+    console.log("Hotel priorities:", hotelPriorities);
 
     // Look for hotel cards/items
     console.log("Searching for hotel elements...");
@@ -221,39 +222,50 @@ function handleSelectHotelPage() {
     console.log("Found", hotelElements.length, "potential hotel elements");
 
     let targetHotel = null;
+    let matchedHotelName = null;
 
-    // Search for configured hotel name
-    for (const hotel of hotelElements) {
-      const hotelText = (
-        hotel.textContent ||
-        hotel.innerText ||
-        ""
-      ).toLowerCase();
-      if (hotelText.includes(targetHotelName)) {
-        targetHotel = hotel;
-        console.log(
-          `✓ Found target hotel (${targetHotelName}) in hotel elements`,
-        );
-        break;
+    // Try each hotel in priority order
+    for (const priorityHotelName of hotelPriorities) {
+      const targetHotelName = priorityHotelName.toLowerCase();
+      console.log(`Searching for priority hotel: "${priorityHotelName}"...`);
+
+      // Search hotel elements
+      for (const hotel of hotelElements) {
+        const hotelText = (
+          hotel.textContent ||
+          hotel.innerText ||
+          ""
+        ).toLowerCase();
+        if (hotelText.includes(targetHotelName)) {
+          targetHotel = hotel;
+          matchedHotelName = priorityHotelName;
+          console.log(
+            `✓ Found priority hotel: "${priorityHotelName}" in hotel elements`,
+          );
+          break;
+        }
       }
-    }
 
-    // If not found by class, search all text
-    if (!targetHotel) {
+      if (targetHotel) break;
+
+      // If not found by class, search all text
       console.log(`Searching all elements for '${targetHotelName}'...`);
       const allElements = document.querySelectorAll("*");
       for (const el of allElements) {
         const text = (el.textContent || el.innerText || "").toLowerCase();
-        if (text.includes(targetHotelName) && !targetHotel) {
+        if (text.includes(targetHotelName)) {
           targetHotel = el.closest("div, li, article, section") || el;
-          console.log("✓ Found target hotel in general search");
+          matchedHotelName = priorityHotelName;
+          console.log(`✓ Found priority hotel: "${priorityHotelName}" in general search`);
           break;
         }
       }
+
+      if (targetHotel) break;
     }
 
     if (targetHotel) {
-      console.log("✓ Target hotel element found");
+      console.log(`✓ Target hotel found: "${matchedHotelName}"`);
 
       // Find the Select button within the hotel element
       const selectBtn =
@@ -298,13 +310,13 @@ function handleSelectHotelPage() {
         targetHotel.style.border = "3px solid red";
       }
     } else {
-      console.error(`✗ Could not find hotel matching '${targetHotelName}'`);
+      console.error(`✗ Could not find any hotels from priority list: ${hotelPriorities.join(", ")}`);
       console.log("Available hotels:");
       hotelElements.forEach((el, i) => {
         console.log(`  [${i}]`, el.textContent.substring(0, 100));
       });
       alert(
-        "Could not find the hotel. Please select a hotel manually and the automation will continue.",
+        "Could not find any hotels from your priority list. Please select a hotel manually and the automation will continue.",
       );
     }
   } catch (error) {
@@ -314,12 +326,13 @@ function handleSelectHotelPage() {
   }
 }
 
-// Page 4: Select Room - Find and select Twin Beds Non Smoking
+// Page 4: Select Room - Find and select room from priority list
 function handleSelectRoomPage() {
   console.log("=== SELECT ROOM PAGE AUTOMATION STARTED ===");
 
   try {
-    const targetRoomName = (config?.roomName || "Twin Beds").toLowerCase();
+    const roomPriorities = config?.roomPriorities || ["Twin Beds"];
+    console.log("Room priorities:", roomPriorities);
 
     // Look for room cards/items
     console.log("Searching for room elements...");
@@ -329,20 +342,30 @@ function handleSelectRoomPage() {
     console.log("Found", roomElements.length, "potential room elements");
 
     let targetRoom = null;
+    let matchedRoomName = null;
 
-    // Search for configured room name
-    for (const room of roomElements) {
-      const roomText = (room.textContent || room.innerText || "").toLowerCase();
-      if (roomText.includes(targetRoomName)) {
-        targetRoom = room;
-        console.log(`✓ Found target room (${targetRoomName})`);
-        console.log("  Room text:", roomText.substring(0, 100));
-        break;
+    // Try each room in priority order
+    for (const priorityRoomName of roomPriorities) {
+      const targetRoomName = priorityRoomName.toLowerCase();
+      console.log(`Searching for priority room: "${priorityRoomName}"...`);
+
+      // Search for configured room name
+      for (const room of roomElements) {
+        const roomText = (room.textContent || room.innerText || "").toLowerCase();
+        if (roomText.includes(targetRoomName)) {
+          targetRoom = room;
+          matchedRoomName = priorityRoomName;
+          console.log(`✓ Found priority room: "${priorityRoomName}"`);
+          console.log("  Room text:", roomText.substring(0, 100));
+          break;
+        }
       }
+
+      if (targetRoom) break;
     }
 
     if (targetRoom) {
-      console.log("✓ Target room element found");
+      console.log(`✓ Target room found: "${matchedRoomName}"`);
 
       // Find the Select button within the room element
       const selectBtn =
@@ -398,7 +421,7 @@ function handleSelectRoomPage() {
         targetRoom.style.border = "3px solid red";
       }
     } else {
-      console.error(`✗ Could not find room matching '${targetRoomName}'`);
+      console.error(`✗ Could not find any rooms from priority list: ${roomPriorities.join(", ")}`);
       console.log("Available rooms:");
       roomElements.forEach((el, i) => {
         const text = (el.textContent || el.innerText).substring(0, 100);
@@ -407,7 +430,7 @@ function handleSelectRoomPage() {
         }
       });
       alert(
-        "Could not find the room. Please select a room manually and the automation will continue.",
+        "Could not find any rooms from your priority list. Please select a room manually and the automation will continue.",
       );
     }
   } catch (error) {
@@ -946,13 +969,15 @@ function createFloatingButton() {
     console.log("Floating button clicked, starting automation...");
     sessionStorage.setItem(AUTO_START_FLAG, "true");
     loadConfigAndStart();
-    
+
     // Visual feedback
     button.innerHTML = "✅ Started!";
-    button.style.background = "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)";
+    button.style.background =
+      "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)";
     setTimeout(() => {
       button.innerHTML = "🚀 Start Booking";
-      button.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+      button.style.background =
+        "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
     }, 2000);
   });
 
@@ -961,8 +986,10 @@ function createFloatingButton() {
 }
 
 // Create floating button when page loads (only on booking pages)
-if (window.location.href.includes("book.passkey.com") || 
-    window.location.href.includes("passkey")) {
+if (
+  window.location.href.includes("book.passkey.com") ||
+  window.location.href.includes("passkey")
+) {
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", createFloatingButton);
   } else {
