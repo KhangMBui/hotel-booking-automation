@@ -32,6 +32,18 @@ async function loadConfigAndStart() {
     }
 
     const result = await chrome.storage.local.get(["bookingConfig"]);
+
+    // const result = await chrome.storage.local.get([
+    //   "bookingConfig",
+    //   "automationPaused",
+    // ]);
+
+    // // Check if automation is paused
+    // if (result.automationPaused) {
+    //   console.log("Automation is paused; skipping execution");
+    //   return;
+    // }
+
     if (!result.bookingConfig) {
       alert("Please configure your booking details first!");
       sessionStorage.removeItem(AUTO_START_FLAG);
@@ -510,6 +522,16 @@ async function handleGuestInfoPage() {
         `Guest ${guestNum} Confirm Email`,
       );
 
+      // Company
+      fillField(
+        [
+          `reservations0.guests${index}.organization`,
+          `reservations[0].guests[${index}].organization`,
+        ],
+        guest.company,
+        `Guest ${guestNum} Company`,
+      );
+
       // Phone (note: field is phoneNumber)
       fillField(
         [
@@ -879,5 +901,73 @@ window.addEventListener("load", () => {
   //   loadConfigAndStart();
   // }
 });
+
+// Create floating button for easy automation start
+function createFloatingButton() {
+  // Check if button already exists
+  if (document.getElementById("qhb-floating-btn")) {
+    return;
+  }
+
+  const button = document.createElement("button");
+  button.id = "qhb-floating-btn";
+  button.innerHTML = "🚀 Start Booking";
+  button.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999999;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  `;
+
+  // Hover effect
+  button.addEventListener("mouseenter", () => {
+    button.style.transform = "translateY(-2px)";
+    button.style.boxShadow = "0 6px 20px rgba(102, 126, 234, 0.6)";
+  });
+
+  button.addEventListener("mouseleave", () => {
+    button.style.transform = "translateY(0)";
+    button.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.4)";
+  });
+
+  // Click handler
+  button.addEventListener("click", () => {
+    console.log("Floating button clicked, starting automation...");
+    sessionStorage.setItem(AUTO_START_FLAG, "true");
+    loadConfigAndStart();
+    
+    // Visual feedback
+    button.innerHTML = "✅ Started!";
+    button.style.background = "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)";
+    setTimeout(() => {
+      button.innerHTML = "🚀 Start Booking";
+      button.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+    }, 2000);
+  });
+
+  document.body.appendChild(button);
+  console.log("Floating button created");
+}
+
+// Create floating button when page loads (only on booking pages)
+if (window.location.href.includes("book.passkey.com") || 
+    window.location.href.includes("passkey")) {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", createFloatingButton);
+  } else {
+    createFloatingButton();
+  }
+}
 
 console.log("Quick Hotel Booker: Ready for automation");

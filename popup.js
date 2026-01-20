@@ -58,6 +58,9 @@ function generateGuestForms() {
       <label for="guest${i}_email">Email:</label>
       <input type="email" id="guest${i}_email" required>
       
+      <label for="guest${i}_company">Company:</label>
+      <input type="text" id="guest${i}_company" placeholder="Optional">
+      
       <label for="guest${i}_phone">Phone:</label>
       <input type="tel" id="guest${i}_phone" placeholder="123-456-7890" required>
       
@@ -106,6 +109,8 @@ function loadConfig() {
           document.getElementById(`guest${i}_lastName`).value =
             guest.lastName || "";
           document.getElementById(`guest${i}_email`).value = guest.email || "";
+          document.getElementById(`guest${i}_company`).value =
+            guest.company || "";
           document.getElementById(`guest${i}_phone`).value = guest.phone || "";
           document.getElementById(`guest${i}_address`).value =
             guest.address || "";
@@ -145,6 +150,7 @@ function saveConfig() {
       firstName: document.getElementById(`guest${i}_firstName`).value,
       lastName: document.getElementById(`guest${i}_lastName`).value,
       email: document.getElementById(`guest${i}_email`).value,
+      company: document.getElementById(`guest${i}_company`).value,
       phone: document.getElementById(`guest${i}_phone`).value,
       address: document.getElementById(`guest${i}_address`).value,
       city: document.getElementById(`guest${i}_city`).value,
@@ -215,6 +221,17 @@ function showStatus(message, type) {
 saveBtn.addEventListener("click", saveConfig);
 startBtn.addEventListener("click", startAutomation);
 numGuestsInput.addEventListener("change", generateGuestForms);
+
+// Auto-save when user clicks out of popup or closes it
+window.addEventListener("blur", () => {
+  console.log("Popup lost focus, auto-saving...");
+  saveConfig();
+});
+
+window.addEventListener("beforeunload", () => {
+  console.log("Popup closing, auto-saving...");
+  saveConfig();
+});
 
 // Initialize
 setDefaultDates();
